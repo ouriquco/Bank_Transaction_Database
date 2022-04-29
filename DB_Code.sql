@@ -22,7 +22,7 @@ CREATE TABLE Customer(
     customer_ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
     customer_Name VARCHAR(128) NOT NULL,
     customer_Address VARCHAR(128) NOT NULL,
-    gender VARCHAR(128) NOT NULL,
+    phone_Number INTEGER NOT NULL,
     account_ID INTEGER NOT NULL,
     ssn INTEGER NOT NULL,
     password VARCHAR(128) NOT NULL,
@@ -67,13 +67,13 @@ INSERT INTO Account(account_Type_ID, account_Name, balance)
     VALUES(3, "Jasmin", 15000);
 
 INSERT INTO Customer(customer_Name, customer_Address, gender, account_ID, ssn, password, email)
-    VALUES("Jordi Greaves", "2273 Grim Avenue", "male", 1, 680237360, "hardtoguesspassword", "Jordigreaves@email.com");
+    VALUES("Jordi Greaves", "2273 Grim Avenue", 2029182132, 1, 680237360, "hardtoguesspassword", "Jordigreaves@email.com");
 INSERT INTO Customer(customer_Name, customer_Address, gender, account_ID, ssn, password, email)
-    VALUES("Stacey Whitaker", "3966 Bolman Court", "female", 2, 425050469, "nevergoingtoguess", "Staceywhitaker@email.com");
+    VALUES("Stacey Whitaker", "3966 Bolman Court", 5823334299, 2, 425050469, "nevergoingtoguess", "Staceywhitaker@email.com");
 INSERT INTO Customer(customer_Name, customer_Address, gender, account_ID, ssn, password, email)
-    VALUES("Arthur Bowden", "2963 West Fork Drive", "male", 3, 541689664, "icantremember", "Authurbowden@email.com");
+    VALUES("Arthur Bowden", "2963 West Fork Drive", 5823334717, 3, 541689664, "icantremember", "Authurbowden@email.com");
 INSERT INTO Customer(customer_Name, customer_Address, gender, account_ID, ssn, password, email)
-    VALUES("Jasmin Ray", "4529 Werninger Street", "female", 4, 520767522, "omgpassword", "Jamsminray@email.com");
+    VALUES("Jasmin Ray", "4529 Werninger Street", 5154677637, 4, 520767522, "omgpassword", "Jamsminray@email.com");
 
 INSERT INTO account_Transaction(transaction_Type_ID, date, amount, transfer_Account_ID, transfer_Account_Name, account_ID)
     VALUES(1, "3/15/2020", 375, NULL, NULL, 1);
