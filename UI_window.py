@@ -1,8 +1,10 @@
 from tkinter import *
+from  tkinter import ttk
 import sqlite3
 import os
-from  tkinter import ttk
 
+
+# see if Bank.db exist, create it if not
 if os.path.exists('Bank.db'):
     connection = sqlite3.connect("Bank.db")
     cursor = connection.cursor()
@@ -15,28 +17,39 @@ else:
     cursor.executescript(sql_as_string)
 
 
-# create windows
-testwindow = Tk()
-testwindow.title("Bank management")
-testwindow.geometry("600x300")
+# create the window to display stuff
+window = Tk()
+window.title("Bank management")
+window.geometry("600x300")
 
-# functions
+# function to close the window
 def close():
-    testwindow.destroy()
+    window.destroy()
 
+# method to clear the query output box
+def clear():
+    ## failed code
+    ## query_table.delete(*query_table.get_children())
+    ## for item in query_table.get_children():
+    ##     query_table.delete(item)
+    for widget in result.winfo_children():
+        widget.destroy()
+
+# fucntion to query stuff
 def querystuff():
     try:
         query_entered = inputbox.get()
         cursor.execute(query_entered)
         connection.commit()
+        #result.delete(1.0, END)
         des = [tuple[0] for tuple in cursor.description]
         results = cursor.fetchall()
 
         # code idea gotten from https://pythonguides.com/python-tkinter-table-tutorial/ 
-        table_frame = result
-        table_frame.pack()
-        table_frame.place(x=10, y=120)
-        query_table = ttk.Treeview(table_frame)
+        ## table_frame = result
+        ## table_frame.pack()
+        ## result.place(x=10, y=120)
+        query_table = ttk.Treeview(result)
         query_table.pack()
     
         # output any query into output box
@@ -45,16 +58,12 @@ def querystuff():
         width = 20
         height = 150
 
-        # add columns to table and define width
-        # for every new column make window bigger
+        # add a change width for every item in des 
         for head in des:
             query_table.column(head,anchor=CENTER, width=100)
             width += 100
 
-        # change the size of the window
-        testwindow.geometry(f'{width}x{height}')
-
-        # put columns name at teh top
+        # put columns name at the top
         query_table.heading("#0",text="",anchor=CENTER)
         for head in des:
             query_table.heading(head,text=head,anchor=CENTER)
@@ -65,39 +74,48 @@ def querystuff():
             height += 50
 
         # change the window size so it fit the query
-        testwindow.geometry(f'{width}x{height}')
+        window.geometry(f'{width}x{height}')
 
-        # old code
-        #cursor.execute(query_entered)
-        #des = [tuple[0] for tuple in cursor.description]
-        #output = cursor.fetchall()
-        #result.insert(END, des)
-        #result.insert(END, '\n')
-        #for out in output:
-        #    result.insert(END, out)
-        #    result.insert(END, '\n')
+        ## old code
+        ##cursor.execute(query_entered)
+        ##des = [tuple[0] for tuple in cursor.description]
+        ##output = cursor.fetchall()
+        ##result.insert(END, des)
+        ##result.insert(END, '\n')
+        ##for out in output:
+        ##    result.insert(END, out)
+        ##    result.insert(END, '\n')
     except:
-        result.insert(END, 'not a query')
+        notquery = Label(result, text="not a query").pack()
     
     
-# stuff on window
-closebtn = Button(testwindow, text = 'close', command=exit)
+# button to close the window
+closebtn = Button(window, text = 'close', command=exit)
 closebtn.place(x=10, y=10)
 
-prompt = Label(testwindow, text="enter something:")
+# text to prompt query input
+prompt = Label(window, text="enter something:")
 prompt.place(x=10, y=40)
 
-inputbox = Entry(testwindow, width=50)
+# button to clear the query output box
+clearbtn = Button(window, text = 'clear query', command=clear)
+clearbtn.place(x=60, y=10)
+
+# place to enter query input
+inputbox = Entry(window, width=50)
 inputbox.place(x=10, y=70)
 
-submit = Button(testwindow, text = 'submit', command = querystuff)
+# submit button to start query
+submit = Button(window, text = 'submit', command = querystuff)
 submit.place(x=315, y=68)
 
-resultlocation = Label(testwindow, text="results here:")
+# text tellng where the results will be
+resultlocation = Label(window, text="results here:")
 resultlocation.place(x=10, y=100)
 
-result = Text(testwindow, width=50, height=20)
+# frame to display the query
+result = Frame(window, width=50, height=20)
 result.place(x=10, y=120)
 
 # run function
-testwindow.mainloop()
+window.mainloop()
