@@ -1,9 +1,13 @@
 from tkinter import *
 import sqlite3
 import os
+from  tkinter import ttk
 
-if os.path.exists('Bank.db') == False:
-    # https://www.adamsmith.haus/python/answers/how-to-execute-an-external-sql-file-using-sqlite3-in-python
+if os.path.exists('Bank.db'):
+    connection = sqlite3.connect("Bank.db")
+    cursor = connection.cursor()
+else:
+    # code idea gotten from https://www.adamsmith.haus/python/answers/how-to-execute-an-external-sql-file-using-sqlite3-in-python
     connection = sqlite3.connect("Bank.db")
     cursor = connection.cursor()
     sql_file = open("DB_Code.sql")
@@ -21,18 +25,57 @@ def close():
     testwindow.destroy()
 
 def querystuff():
-    query_entered = inputbox.get()
-    result.delete(0.0, END)
-
     try:
+        query_entered = inputbox.get()
         cursor.execute(query_entered)
+        connection.commit()
         des = [tuple[0] for tuple in cursor.description]
-        output = cursor.fetchall()
-        result.insert(END, des)
-        result.insert(END, '\n')
-        for out in output:
-            result.insert(END, out)
-            result.insert(END, '\n')
+        results = cursor.fetchall()
+
+        # code idea gotten from https://pythonguides.com/python-tkinter-table-tutorial/ 
+        table_frame = result
+        table_frame.pack()
+        table_frame.place(x=10, y=120)
+        query_table = ttk.Treeview(table_frame)
+        query_table.pack()
+    
+        # output any query into output box
+        query_table['columns'] = des
+        query_table.column("#0", width=0,  stretch=NO)
+        width = 20
+        height = 150
+
+        # add columns to table and define width
+        # for every new column make window bigger
+        for head in des:
+            query_table.column(head,anchor=CENTER, width=100)
+            width += 100
+
+        # change the size of the window
+        testwindow.geometry(f'{width}x{height}')
+
+        # put columns name at teh top
+        query_table.heading("#0",text="",anchor=CENTER)
+        for head in des:
+            query_table.heading(head,text=head,anchor=CENTER)
+    
+        # insert query into the table
+        for x in range(len(results)):
+            query_table.insert(parent='',index='end', iid=x, text='', values=results[x])
+            height += 50
+
+        # change the window size so it fit the query
+        testwindow.geometry(f'{width}x{height}')
+
+        # old code
+        #cursor.execute(query_entered)
+        #des = [tuple[0] for tuple in cursor.description]
+        #output = cursor.fetchall()
+        #result.insert(END, des)
+        #result.insert(END, '\n')
+        #for out in output:
+        #    result.insert(END, out)
+        #    result.insert(END, '\n')
     except:
         result.insert(END, 'not a query')
     
