@@ -99,7 +99,7 @@ prompt.place(x=10, y=40)
 
 # button to clear the query output box
 clearbtn = Button(window, text = 'clear query', command=clear)
-clearbtn.place(x=60, y=10)
+clearbtn.place(x=150, y=10)
 
 # place to enter query input
 inputbox = Entry(window, width=50)
@@ -107,14 +107,14 @@ inputbox.place(x=10, y=70)
 
 # submit button to start query
 submit = Button(window, text = 'submit', command = querystuff)
-submit.place(x=315, y=68)
+submit.place(x=500, y=68)
 
 # text tellng where the results will be
 resultlocation = Label(window, text="results here:")
 resultlocation.place(x=10, y=100)
 
 # frame to display the query
-result = Frame(window, width=50, height=20)
+result = Frame(window, width=150, height=20)
 result.place(x=10, y=120)
 
 # run function
